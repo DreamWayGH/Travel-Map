@@ -1,0 +1,35 @@
+<div class="main">
+  <div class="login-back">
+    <img class="login-icon select-none" src="../assets/img/Icon.png" />
+    <div class="input-back">
+      <img class="select-none" src="../assets/img/People.svg" />
+      <input type="text" placeholder="username" />
+    </div>
+    <div class="input-back">
+      <img class="select-none" src="../assets/img/LockOpen.svg" />
+      <input
+        [type]="isShownPassword ? 'text' : 'password'"
+        placeholder="password"
+      />
+      <img
+        class="ctrl-btn select-none"
+        [src]="
+          isShownPassword
+            ? '../assets/img/EyeOutline.svg'
+            : '../assets/img/EyeInvisibleOutlined.svg'
+        "
+        (mousedown)="showPassword(true)"
+        (mouseleave)="showPassword(false)"
+        (mouseup)="showPassword(false)"
+      />
+    </div>
+    <div></div>
+    <button class="select-none">登入</button>
+    <div class="login-note select-none">
+      <div>————————</div>
+      <div>或</div>
+      <div>————————</div>
+    </div>
+    <div class="login-visitor select-none">訪客登入</div>
+  </div>
+</div>
