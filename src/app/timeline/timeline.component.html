@@ -1,0 +1,12 @@
+<div class="timeline">
+  <div *ngFor="let data of timelineData" class="timeline-event">
+    <div class="timeline-point-track-container">
+      <div class="timeline-point" [ngClass]="{'year-point': data.type == 'year'}"></div>
+      <div class="timeline-track" [ngClass]="{'year-track': data.type == 'year'}"></div>
+    </div>
+    <div class="timeline-content">
+      <span class="timeline-date" [ngClass]="{'year-date': data.type == 'year'}">{{ data.date }}</span>
+      <span>{{ data.type == "event" ? '- ' + data.content : data.content }}</span>
+    </div>
+  </div>
+</div>

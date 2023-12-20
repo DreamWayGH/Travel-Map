@@ -1,5 +1,12 @@
 body {
   margin: 0;
+  font-family: Microsoft JhengHei;
+  ::-webkit-scrollbar {
+    width: 5px; /* 調整滾動條寬度 */
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #ccc; /* 調整滾動條的顏色 */
+  }
 }
 
 // 禁止反白

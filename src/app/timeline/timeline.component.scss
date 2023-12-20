@@ -1,0 +1,58 @@
+.timeline {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  padding: 1rem;
+  .timeline-event {
+    display: flex;
+    position: relative;
+    min-height: 70px;
+    &:last-child {
+      min-width: 0;
+    }
+    .timeline-content {
+      flex: 1;
+      padding: 0 1rem;
+      display: flex;
+      flex-direction: column;
+      .timeline-date {
+        font-size: 16px;
+        font-style: italic;
+        padding: 0px 5px 5px 0;
+        &.year-date{
+          font-size: 30px;
+        }
+      }
+    }
+    .timeline-point-track-container {
+      flex: 0;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      .timeline-point {
+        display: flex;
+        align-self: baseline;
+        border: 2px solid #55f;
+        border-radius: 50%;
+        width: 1rem;
+        height: 1rem;
+        margin-left: 0.5rem;
+        background-color: #fff;
+        &.year-point{
+          width: 2rem;
+          height: 2rem;
+          margin-left: 0;
+        }
+      }
+      .timeline-track {
+        flex-grow: 1;
+        background-color: #dee2e6;
+        width: 2px;
+        margin-left: 0.5rem;
+        &.year-track{
+          margin-left: 0;
+        }
+      }
+    }
+  }
+}
