@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build-git": "ng build --base-href https://dreamwaygh.github.io/Travel-Map-Dist/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
