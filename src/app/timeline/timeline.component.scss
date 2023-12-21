@@ -25,6 +25,9 @@
           font-size: 30px;
         }
       }
+      .timeline-content {
+        padding: 0px 0px 10px 0;
+      }
     }
     .timeline-point-track-container {
       flex: 0;
@@ -91,7 +94,6 @@
       }
     }
   }
-
   @media (max-width: 1200px) {
     & {
       flex-direction: row;
