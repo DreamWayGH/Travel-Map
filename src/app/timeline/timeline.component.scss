@@ -97,6 +97,36 @@
   @media (max-width: 1200px) {
     & {
       flex-direction: row;
+      .timeline-event {
+        flex-direction: column;
+        .timeline-point-track-container {
+          flex-direction: row;
+          .timeline-point {
+            margin-left: 0;
+          }
+          .timeline-track {
+            width: 100%;
+            height: 2px;
+            margin-left: 0;
+          }
+        }
+        &:not(.year-container) {
+          .timeline-point-track-container {
+            margin-top: 0.5rem;
+          }
+        }
+        &:hover:not(.year-container) {
+          .timeline-point-track-container {
+            margin-top: 0.4rem;
+            .timeline-point {
+              margin-left: 0;
+            }
+            .timeline-track {
+              margin-left: 0;
+            }
+          }
+        }
+      }
     }
   }
 }

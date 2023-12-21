@@ -12,7 +12,6 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 export class MenuComponent {
   currentPage = 'Home';
   changeCurrentPage(page: string) {
-    console.log(page)
     this.currentPage = page;
   }
 

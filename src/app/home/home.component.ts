@@ -11,7 +11,7 @@ import { TimelineComponent } from '../timeline/timeline.component';
 export class HomeComponent {
   //暫停輪播
   isPlayStoped = false;
-  playingSpeed = 3000;
+  playingSpeed = 300000;
   stopPlayPhoto(status: boolean) {
     this.isPlayStoped = status;
   }
