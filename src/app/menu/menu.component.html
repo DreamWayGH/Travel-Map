@@ -1,9 +1,14 @@
 <div class="menu-back select-none">
-    <div class="page-btn">Home</div>
-    <div class="page-btn">About</div>
-    <div class="page-btn">Map</div>
-    <div class="user-icon">
-        <img src="assets/img/Icon.png" routerLink="/">
-    </div>
+  <div
+    *ngFor="let page of pageList"
+    class="page-btn"
+    [class.active]="currentPage === page.code"
+    (click)="changeCurrentPage(page.code)"
+  >
+    {{ page.name }}
+  </div>
+  <div class="user-icon">
+    <img src="assets/img/Icon.png" routerLink="/" />
+  </div>
 </div>
 <router-outlet></router-outlet>

@@ -1,12 +1,27 @@
 <div class="timeline">
-  <div *ngFor="let data of timelineData" class="timeline-event">
+  <div
+    *ngFor="let data of timelineData; let i = index"
+    class="timeline-event"
+    (click)="selectPhoto.emit(i)"
+    (mouseleave)="stopPlayPhoto.emit(false)"
+    [ngClass]="{ 'year-container': data.type == 'year' }"
+  >
     <div class="timeline-point-track-container">
-      <div class="timeline-point" [ngClass]="{'year-point': data.type == 'year'}"></div>
-      <div class="timeline-track" [ngClass]="{'year-track': data.type == 'year'}"></div>
+      <div
+        class="timeline-point"
+        [ngClass]="{ 'point-selected': data.selected == true }"
+      >
+        <div class="timeline-point-contain"></div>
+      </div>
+      <div class="timeline-track"></div>
     </div>
     <div class="timeline-content">
-      <span class="timeline-date" [ngClass]="{'year-date': data.type == 'year'}">{{ data.date }}</span>
-      <span>{{ data.type == "event" ? '- ' + data.content : data.content }}</span>
+      <span
+        class="timeline-date"
+        [ngClass]="{ 'year-date': data.type == 'year' }"
+        >{{ data.type == "event" ? "- " + data.date : data.date }}</span
+      >
+      <span>{{ data.content }}</span>
     </div>
   </div>
 </div>

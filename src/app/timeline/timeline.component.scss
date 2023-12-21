@@ -7,10 +7,12 @@
     display: flex;
     position: relative;
     min-height: 70px;
+    cursor: pointer;
     &:last-child {
       min-width: 0;
     }
     .timeline-content {
+      min-width: 120px;
       flex: 1;
       padding: 0 1rem;
       display: flex;
@@ -19,7 +21,7 @@
         font-size: 16px;
         font-style: italic;
         padding: 0px 5px 5px 0;
-        &.year-date{
+        &.year-date {
           font-size: 30px;
         }
       }
@@ -32,27 +34,67 @@
       .timeline-point {
         display: flex;
         align-self: baseline;
-        border: 2px solid #55f;
+        border: 2px solid #f1ca7b;
         border-radius: 50%;
         width: 1rem;
         height: 1rem;
         margin-left: 0.5rem;
         background-color: #fff;
-        &.year-point{
-          width: 2rem;
-          height: 2rem;
-          margin-left: 0;
+        .timeline-point-contain {
+          width: calc(100% - 4px);
+          height: calc(100% - 4px);
+          margin: 2px;
+          border-radius: 50%;
+        }
+        &.point-selected {
+          border: 2px solid #4d7bb2;
+          .timeline-point-contain {
+            background-color: #4d7bb2cc;
+          }
         }
       }
       .timeline-track {
         flex-grow: 1;
-        background-color: #dee2e6;
+        background-color: #f1ca7b;
         width: 2px;
         margin-left: 0.5rem;
-        &.year-track{
+      }
+    }
+    &.year-container {
+      cursor: default;
+      .timeline-point-track-container {
+        .timeline-point {
+          width: 2rem;
+          height: 2rem;
+          margin-left: 0;
+          border: 2px solid #6a7886;
+          .timeline-point-contain {
+            background-color: #6a788655;
+          }
+        }
+        .timeline-track {
           margin-left: 0;
         }
       }
+    }
+    &:hover:not(.year-container) {
+      .timeline-point-track-container {
+        .timeline-point {
+          border: 2px solid #4d7bb2;
+          width: 1.2rem;
+          height: 1.2rem;
+          margin-left: 0.4rem;
+        }
+        .timeline-track {
+          margin-left: 0.4rem;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 1200px) {
+    & {
+      flex-direction: row;
     }
   }
 }

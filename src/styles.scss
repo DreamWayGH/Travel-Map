@@ -3,6 +3,7 @@ body {
   font-family: Microsoft JhengHei;
   ::-webkit-scrollbar {
     width: 5px; /* 調整滾動條寬度 */
+    height: 5px; /* 調整滾動條高度 */ 
   }
   ::-webkit-scrollbar-thumb {
     background-color: #ccc; /* 調整滾動條的顏色 */

@@ -1,8 +1,17 @@
 <div class="main">
-    <div class="timeline-wrap">
-        <app-timeline></app-timeline>
-    </div>
-    <div class="photo-wrap">
-        <img src="assets/img/Background.jpg">
-    </div>
+  <div class="timeline-wrap">
+    <app-timeline
+      [timelineData]="timelineData"
+      (selectPhoto)="selectPhoto($event)"
+      (stopPlayPhoto)="stopPlayPhoto($event)"
+    ></app-timeline>
+  </div>
+  <div class="photo-wrap">
+    <img
+      [class.leave]="isPhotoLeave"
+      [src]="thisPhotoUrl"
+      (mouseover)="stopPlayPhoto(true)"
+      (mouseleave)="stopPlayPhoto(false)"
+    />
+  </div>
 </div>
