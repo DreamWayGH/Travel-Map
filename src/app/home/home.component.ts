@@ -13,6 +13,7 @@ export class HomeComponent {
   isPlayStoped = false;
   playingSpeed = 3000;
   stopPlayPhoto(status: boolean) {
+    // console.log(status)
     this.isPlayStoped = status;
   }
   //自動輪播
