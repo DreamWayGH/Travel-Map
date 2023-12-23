@@ -57,12 +57,13 @@
     }
     .timeline-wrap {
       width: calc(100% - 40px);
+      max-height: 30%;
       margin: 0 0 0 20px;
       justify-content: flex-start;
     }
     .photo-wrap {
       width: calc(100% - 40px);
-      min-height: 70%;
+      height: 70%;
     }
   }
 }

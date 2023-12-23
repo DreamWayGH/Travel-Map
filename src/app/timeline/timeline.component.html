@@ -1,27 +1,35 @@
 <div class="timeline">
-  <div
-    *ngFor="let data of timelineData; let i = index"
-    class="timeline-event"
-    (click)="selectPhoto.emit(i)"
-    (mouseleave)="stopPlayPhoto.emit(false)"
-    [ngClass]="{ 'year-container': data.type == 'year' }"
-  >
-    <div class="timeline-point-track-container">
-      <div
-        class="timeline-point"
-        [ngClass]="{ 'point-selected': data.selected == true }"
-      >
-        <div class="timeline-point-contain"></div>
+  <ng-container *ngIf="timelineData.length === 0">
+    <div class="loading-container">
+      <span class="loading-text">Loading...</span>
+      <div class="loading-spinner"></div>
+    </div>
+  </ng-container>
+  <ng-container>
+    <div
+      *ngFor="let data of timelineData; let i = index"
+      class="timeline-event"
+      (click)="selectPhoto.emit(i)"
+      (mouseleave)="stopPlayPhoto.emit(false)"
+      [ngClass]="{ 'year-container': data.type == 'year' }"
+    >
+      <div class="timeline-point-track-container">
+        <div
+          class="timeline-point"
+          [ngClass]="{ 'point-selected': data.selected == true }"
+        >
+          <div class="timeline-point-contain"></div>
+        </div>
+        <div class="timeline-track"></div>
       </div>
-      <div class="timeline-track"></div>
+      <div class="timeline-content">
+        <span
+          class="timeline-date"
+          [ngClass]="{ 'year-date': data.type == 'year' }"
+          >{{ data.type == "event" ? "- " + data.date : data.date }}</span
+        >
+        <span class="timeline-content">{{ data.content }}</span>
+      </div>
     </div>
-    <div class="timeline-content">
-      <span
-        class="timeline-date"
-        [ngClass]="{ 'year-date': data.type == 'year' }"
-        >{{ data.type == "event" ? "- " + data.date : data.date }}</span
-      >
-      <span class="timeline-content">{{ data.content }}</span>
-    </div>
-  </div>
+  </ng-container>
 </div>

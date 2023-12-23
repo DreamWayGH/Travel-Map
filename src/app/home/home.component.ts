@@ -1,14 +1,22 @@
 import { Component } from '@angular/core';
 import { TimelineComponent } from '../timeline/timeline.component';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [TimelineComponent],
+  imports: [TimelineComponent, HttpClientModule],
+  providers: [DatePipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
+  constructor(
+    private http: HttpClient,
+    private datePipe: DatePipe,
+  ) {}
+
   //暫停輪播
   isPlayStoped = false;
   playingSpeed = 3000;
@@ -18,7 +26,21 @@ export class HomeComponent {
   }
   //自動輪播
   autoPlayTimer: any = null;
-  ngAfterViewInit() {
+  async ngAfterViewInit() {
+    //取得相簿清單
+    try {
+      const res = await this.getTripData().toPromise();
+      console.log(res);
+      this.resetTimelineData(res as any[]);
+    } catch (ex) {
+      console.log(ex);
+    }
+
+    const trips = this.timelineData.filter((x) => x.type === 'trip');
+    if (trips.length === 0) {
+      console.log('無相簿');
+      return;
+    }
     this.changePhoto(0);
     this.autoPlayTimer = setInterval(() => {
       if (!this.isPlayStoped) {
@@ -60,8 +82,8 @@ export class HomeComponent {
     }
     this.timelineData[id].selected = true;
     this.isPhotoLeave = true;
-    if(this.photoOpacityTimeout != null){
-      window.clearTimeout(this.photoOpacityTimeout)
+    if (this.photoOpacityTimeout != null) {
+      window.clearTimeout(this.photoOpacityTimeout);
     }
     this.photoOpacityTimeout = setTimeout(() => {
       this.thisPhotoUrl =
@@ -76,135 +98,46 @@ export class HomeComponent {
     this.changePhoto(id);
   }
 
-  timelineData = [
-    { content: '', date: '2023', type: 'year', selected: false, img: '' },
-    {
-      content: '陽明山陽明山陽明山陽明山陽明山',
-      date: '2023-12-21',
-      type: 'event',
-      selected: false,
-      img: 'assets/img/Icon.png',
-    },
-    {
-      content: '玉山主峰',
-      date: '2023-12-02',
-      type: 'event',
-      selected: false,
-      img: 'assets/img/Background.jpg',
-    },
-    {
-      content: '大霸尖山',
-      date: '2023-11-21',
-      type: 'event',
-      selected: false,
-      img: 'assets/img/EyeInvisibleOutlined.svg',
-    },
-    {
-      content: '奇萊南峰',
-      date: '2023-11-02',
-      type: 'event',
-      selected: false,
-      img: 'assets/img/EyeOutline.svg',
-    },
-    {
-      content:
-        '雪山北峰雪山北峰雪山北峰雪山北峰雪山北峰雪山北峰雪山北峰雪山北峰',
-      date: '2023-10-01',
-      type: 'event',
-      selected: false,
-      img: 'assets/img/LockOpen.svg',
-    },
-    {
-      content: '玉山主峰',
-      date: '2023-12-02',
-      type: 'event',
-      selected: false,
-      img: 'assets/img/People.svg',
-    },
-    {
-      content: '大霸尖山',
-      date: '2023-11-21',
-      type: 'event',
-      selected: false,
-      img: 'assets/img/Icon.png',
-    },
-    {
-      content:
-        '奇萊南峰奇萊南峰奇萊南峰奇萊南峰奇萊南峰奇萊南峰奇萊南峰奇萊南峰奇萊南峰奇萊南峰奇萊南峰奇萊南峰奇萊南峰',
-      date: '2023-11-02',
-      type: 'event',
-      selected: false,
-      img: 'assets/img/Background.jpg',
-    },
-    {
-      content: '雪山北峰',
-      date: '2023-10-01',
-      type: 'event',
-      selected: false,
-      img: 'assets/img/EyeInvisibleOutlined.svg',
-    },
-    {
-      content: '玉山主峰',
-      date: '2023-12-02',
-      type: 'event',
-      selected: false,
-      img: 'assets/img/EyeOutline.svg',
-    },
-    {
-      content: '大霸尖山',
-      date: '2023-11-21',
-      type: 'event',
-      selected: false,
-      img: 'assets/img/LockOpen.svg',
-    },
-    {
-      content: '',
-      date: '2022',
-      type: 'year',
-      selected: false,
-      img: 'assets/img/People.svg',
-    },
-    {
-      content: '奇萊南峰',
-      date: '2023-11-02',
-      type: 'event',
-      selected: false,
-      img: 'assets/img/Icon.png',
-    },
-    {
-      content: '雪山北峰',
-      date: '2023-10-01',
-      type: 'event',
-      selected: false,
-      img: 'assets/img/Background.jpg',
-    },
-    {
-      content: '玉山主峰',
-      date: '2023-12-02',
-      type: 'event',
-      selected: false,
-      img: 'assets/img/EyeInvisibleOutlined.svg',
-    },
-    {
-      content: '大霸尖山',
-      date: '2023-11-21',
-      type: 'event',
-      selected: false,
-      img: 'assets/img/EyeOutline.svg',
-    },
-    {
-      content: '奇萊南峰',
-      date: '2023-11-02',
-      type: 'event',
-      selected: false,
-      img: 'assets/img/LockOpen.svg',
-    },
-    {
-      content: '雪山北峰',
-      date: '2023-10-01',
-      type: 'event',
-      selected: false,
-      img: 'assets/img/People.svg',
-    },
-  ];
+  //相簿集資料
+  timelineData = [] as TripData[];
+
+  getTripData() {
+    return this.http.get('https://travel-map-server.fly.dev/api/GoogleSheet/trips');
+  }
+
+  resetTimelineData(newData: any[]) {
+    this.timelineData = [];
+    const years = [] as number[];
+    //以日期倒排序
+    const sortedData = newData
+      .map((x) => ({ ...x, date: new Date(x.date) }))
+      .sort((a, b) => b.date.getTime() - a.date.getTime());
+
+    sortedData.forEach((data: any) => {
+      const date = new Date(data.date);
+      const year = date.getFullYear();
+      if (!years.includes(year)) {
+        years.push(year);
+        const newYear = { date: year.toString(), type: 'year' } as TripData;
+        this.timelineData.push(newYear);
+      }
+
+      const newTrip = {
+        content: data.name,
+        img: data.image,
+        date: this.datePipe.transform(data.date.toString(), 'yyyy-MM-dd'),
+        type: 'trip',
+        selected: false,
+      } as TripData;
+      this.timelineData.push(newTrip);
+    });
+  }
+}
+
+interface TripData {
+  content: string;
+  date: string;
+  type: 'year' | 'trip';
+  selected: boolean;
+  img: string;
 }
