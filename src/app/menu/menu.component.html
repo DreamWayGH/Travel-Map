@@ -2,6 +2,7 @@
   <div
     *ngFor="let page of pageList"
     class="page-btn"
+    [routerLink]="page.router"
     [class.active]="currentPage === page.code"
     (click)="changeCurrentPage(page.code)"
   >

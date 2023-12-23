@@ -1,0 +1,46 @@
+<div class="main">
+  <div class="photo-wrap">
+    <div class="photo-bg">
+      <div class="photo-info">
+        <div class="photo-name">Willie</div>
+        <div class="photo-job">EMS Engineer</div>
+      </div>
+      <img class="photo-img" src="assets/img/1275211.jpg" />
+    </div>
+  </div>
+  <div class="info-wrap">
+    <div class="info-item">
+      <div class="info-title">關於我</div>
+      <div class="info-line"></div>
+      <div class="info-content">
+        <div *ngFor="let info of aboutData">
+          <p></p>
+          <div>{{ info }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="info-item">
+      <div class="info-title">技能</div>
+      <div class="info-line"></div>
+      <div class="info-content">
+        <div *ngFor="let info of skillData">
+          <p></p>
+          <div>{{ info }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="info-item">
+      <div class="info-title">經歷</div>
+      <div class="info-line"></div>
+      <div class="info-content">
+        <div *ngFor="let info of expData">
+          <p></p>
+          <div>{{ info }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-wrap">
+    <div class="bottom-line"></div>
+  </div>
+</div>
