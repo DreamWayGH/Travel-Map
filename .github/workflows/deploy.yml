@@ -18,11 +18,12 @@ jobs:
           node-version: 20
 
       - name: Build Angular app to prod
+        working-directory: Travel-Map
         run: npm install && npm run build
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: dist/browser
+          folder: Travel-Map/dist
           branch: prod  
           token: ${{ secrets.GH_TOKEN }}
