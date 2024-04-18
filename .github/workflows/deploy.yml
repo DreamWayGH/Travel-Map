@@ -4,27 +4,26 @@ on:
   push:
     tags:
       - v*
-      
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: 20
 
-      - name: Install Angular CLI
-        run: npm install -g @angular/cli
-
-      - name: Build Angular project
-        run: ng build --prod --base-href=/Travel-Map/
+      - name: Build Angular app to prod
+        working-directory: Travel-Map
+        run: npm install && npm run build:prod
 
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@releases/v3
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          branch: gh-pages
-          directory: dist
+          folder: Travel-Map/dist
+          branch: prod  
+          token: ${{ secrets.GITHUB_TOKEN }}
