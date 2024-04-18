@@ -18,6 +18,7 @@ jobs:
           node-version: 20
 
       - name: Build Angular app to prod
+        working-directory: Travel-Map
         run: npm install && npm run build
 
       - name: Deploy to GitHub Pages
