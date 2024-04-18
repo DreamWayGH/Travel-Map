@@ -25,5 +25,5 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: Travel-Map/dist/browser
-          branch: prod  
+          branch: gh-pages  
           token: ${{ secrets.GH_TOKEN }}
