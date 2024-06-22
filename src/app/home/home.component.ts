@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { TimelineComponent } from '../timeline/timeline.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
@@ -6,7 +7,7 @@ import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [TimelineComponent, HttpClientModule],
+  imports: [CommonModule, TimelineComponent, HttpClientModule],
   providers: [DatePipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -48,6 +49,9 @@ export class HomeComponent {
           (x) => x.selected == true,
         );
         // console.log(thisIndex);
+        if (this.preLoadefIndex < thisIndex) {
+          return;
+        }
         if (thisIndex < this.timelineData.length - 1) {
           this.changePhoto(thisIndex + 1);
         } else {
@@ -90,8 +94,32 @@ export class HomeComponent {
         this.timelineData[id].img || 'assets/img/Background.jpg';
       this.isPhotoLeave = false;
       this.photoOpacityTimeout = null;
+      this.checkVisibility();
     }, 500);
   }
+
+  //偵測超出螢幕
+  checkVisibility() {
+    const selectedContainer = document.querySelector('.selected-container');
+    if (selectedContainer) {
+      const bounding = selectedContainer.getBoundingClientRect();
+      if (
+        bounding.top < 0 ||
+        bounding.bottom >
+          (window.innerHeight || document.documentElement.clientHeight) ||
+        bounding.left < 0 ||
+        bounding.right >
+          (window.innerWidth || document.documentElement.clientWidth)
+      ) {
+        selectedContainer.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+          inline: 'center',
+        });
+      }
+    }
+  }
+
   //手動點擊項目
   selectPhoto(id: number) {
     this.stopPlayPhoto(true);
@@ -102,7 +130,9 @@ export class HomeComponent {
   timelineData = [] as TripData[];
 
   getTripData() {
-    return this.http.get('https://travel-map-server.fly.dev/api/GoogleSheet/trips');
+    return this.http.get(
+      'https://travel-map-server.fly.dev/api/GoogleSheet/trips',
+    );
   }
 
   resetTimelineData(newData: any[]) {
@@ -131,6 +161,28 @@ export class HomeComponent {
       } as TripData;
       this.timelineData.push(newTrip);
     });
+    this.preLoadImage(this.timelineData);
+  }
+
+  //預先載入圖片
+  preLoadefIndex = -1;
+  async preLoadImage(data: TripData[]) {
+    if (data?.length > 0) {
+      for (let i = 0; i < data.length; i++) {
+        try {
+          if (data[i].img) {
+            await this.loadImage(data[i].img).toPromise();
+          }
+        } catch (e) {
+          console.log(e);
+        }
+        this.preLoadefIndex = i;
+      }
+    }
+  }
+
+  loadImage(url: string) {
+    return this.http.get(url, { responseType: 'blob' });
   }
 }
 

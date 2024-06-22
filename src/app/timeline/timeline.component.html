@@ -11,7 +11,10 @@
       class="timeline-event"
       (click)="selectPhoto.emit(i)"
       (mouseleave)="stopPlayPhoto.emit(false)"
-      [ngClass]="{ 'year-container': data.type == 'year' }"
+      [ngClass]="{
+        'year-container': data.type == 'year',
+        'selected-container': data.selected == true
+      }"
     >
       <div class="timeline-point-track-container">
         <div

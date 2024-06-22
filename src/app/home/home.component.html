@@ -13,4 +13,9 @@
       (mouseleave)="stopPlayPhoto(false)"
     />
   </div>
+  <img
+    *ngIf="isPlayStoped"
+    class="select-none button-paly"
+    src="assets/img/PlayCircle.svg"
+  />
 </div>
