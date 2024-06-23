@@ -37,8 +37,11 @@
     img {
       width: calc(100% - 80px);
       height: calc(100% - 80px);
-      object-fit: contain;
-      // box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      object-fit: cover;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      border: 5px solid #ccccff54;
+      border-radius: 10px;
+      padding: 5px;
       transition: opacity 0.5s ease;
       &.leave{
         opacity: 0;
@@ -57,13 +60,14 @@
     }
     .timeline-wrap {
       width: calc(100% - 40px);
-      max-height: 30%;
+      max-height: 125px;
       margin: 0 0 0 20px;
       justify-content: flex-start;
     }
     .photo-wrap {
       width: calc(100% - 40px);
       height: 70%;
+      max-height: calc(100% - 165px);
     }
   }
 
