@@ -17,6 +17,14 @@ jobs:
         with:
           node-version: 20
 
+      - name: Get the current tag
+        id: get_tag
+        run: echo "TAG_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+
+      - name: Update version in environment files
+        run: |
+          sed -i "s/version: 'v-0.0.0'/version: '${{ env.TAG_NAME }}'/" src/environment.ts
+
       - name: Build Angular app to prod
         run: npm install && npm run build-git
 

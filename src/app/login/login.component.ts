@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { environment } from '../../environment';
 
 @Component({
   selector: 'app-login',
@@ -9,6 +10,7 @@ import { RouterLink } from '@angular/router';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
+  version = environment.version;
   isShownPassword = false;
   showPassword() {
     this.isShownPassword = !this.isShownPassword;
