@@ -1,0 +1,22 @@
+<div class="main">
+  <div class="map-wrap">
+    <google-map
+      height="80vh"
+      width="100%"
+      [center]="center"
+      [zoom]="zoom"
+      [options]="mapOptions"
+    >
+      <map-marker
+        *ngFor="let marker of markers"
+        class="map-marker"
+        [position]="marker.position"
+        [title]="marker.title"
+        [label]="marker.label"
+        [options]="marker.options"
+        [icon]="marker.icon"
+      >
+      </map-marker>
+    </google-map>
+  </div>
+</div>

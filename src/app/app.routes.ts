@@ -3,6 +3,7 @@ import { LoginComponent } from './login/login.component';
 import { MenuComponent } from './menu/menu.component';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
+import { MapComponent } from './map/map.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -13,7 +14,7 @@ export const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomeComponent },
       { path: 'about', component: AboutComponent },
-      { path: 'map', component: HomeComponent },
+      { path: 'map', component: MapComponent },
     ],
   },
   { path: '**', redirectTo: '/' },

@@ -47,6 +47,7 @@
         padding: 5px;
         font-size: 16px;
         border: 1px solid #0000;
+        font-family: 'ThePeakFont', 'Microsoft JhengHei', sans-serif;
   
         &::placeholder {
           color: #aaa;
@@ -75,6 +76,7 @@
       font-size: 16px;
       font-weight: bold;
       color: #aa0;
+      font-family: 'ThePeakFont', 'Microsoft JhengHei', sans-serif;
       cursor: pointer;
       &:hover {
         background-color: #ccc2;

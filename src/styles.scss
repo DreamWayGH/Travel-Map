@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: Microsoft JhengHei;
+  font-family: 'ThePeakFont', 'Microsoft JhengHei', sans-serif;
   ::-webkit-scrollbar {
     width: 5px; /* 調整滾動條寬度 */
     height: 5px; /* 調整滾動條高度 */ 
@@ -12,6 +12,11 @@ body {
     background: linear-gradient(#f1f1f1, #d5d5d5); /* 滚动条轨道背景色 */
     border-radius: 10px; /* 圆角轨道 */
   }
+}
+
+@font-face {
+  font-family: 'ThePeakFont';
+  src: url('assets/fonts/ThePeakFontBeta_V0_101.ttf') format('truetype');
 }
 
 // 禁止反白
