@@ -175,14 +175,16 @@ export class MapComponent {
         },
       ],
     });
-    this.markers.forEach((marker,i) => {
+    this.markers.forEach((marker, i) => {
       marker.addListener('click', () => {
         this.infoWindow.setContent(`
           <div class='info-window'>
             <h2>${this.markerRawData[i].name}</h2>
             <img src="${this.markerRawData[i].image}">
             <p>${this.markerRawData[i].note}</p>
-            <p>${this.markerRawData[i].link}</p>
+            <a href='${this.markerRawData[i].link ?? ''}'>${
+              this.markerRawData[i].link ?? ''
+            }</a>
           </div>
         `);
         this.infoWindow.open(this.map.googleMap, marker);

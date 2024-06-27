@@ -37,27 +37,34 @@
     }
   }
 
-  .gm-style-iw-chr{
-    > button{
+  .gm-style-iw-chr {
+    > button {
       width: 1.5rem !important;
       height: 1.5rem !important;
       background-color: #fff;
       border-radius: 50%;
       margin: 10px 10px 0 10px !important;
-     > span{
-      width: 1.5rem !important;
-      height: 1.5rem !important;
-      margin: 0 !important;
-     }
+      > span {
+        width: 1.5rem !important;
+        height: 1.5rem !important;
+        margin: 0 !important;
+      }
     }
   }
-  .info-window{
+  .info-window {
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-family: 'ThePeakFont', 'Microsoft JhengHei', sans-serif;
-    > img{
-      max-width: 300px;
+    font-family: "ThePeakFont", "Microsoft JhengHei", sans-serif;
+    > img {
+      max-width: min(300px, 100%);
+    }
+    > a,
+    p {
+      width: 100%;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      word-break: break-all;
     }
   }
 }
