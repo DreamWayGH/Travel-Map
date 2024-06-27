@@ -180,9 +180,11 @@ export class MapComponent {
         this.infoWindow.setContent(`
           <div class='info-window'>
             <h2>${this.markerRawData[i].name}</h2>
-            <img src="${this.markerRawData[i].image}">
+             <a href="${this.markerRawData[i].image}" target="_blank">
+              <img src="${this.markerRawData[i].image}"/>
+            </a>
             <p>${this.markerRawData[i].note}</p>
-            <a href='${this.markerRawData[i].link ?? ''}'>${
+            <a href='${this.markerRawData[i].link ?? ''}' target="_blank">${
               this.markerRawData[i].link ?? ''
             }</a>
           </div>
