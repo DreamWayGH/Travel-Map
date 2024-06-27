@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { GoogleMapsModule } from '@angular/google-maps';
+import { GoogleMap, GoogleMapsModule } from '@angular/google-maps';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import MarkerClusterer from '@google/markerclustererplus';
 
 @Component({
   selector: 'app-map',
@@ -11,6 +12,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
   styleUrl: './map.component.scss',
 })
 export class MapComponent {
+  @ViewChild(GoogleMap) map!: GoogleMap;
+
   constructor(private http: HttpClient) {}
 
   def_lat = 23.68348;
@@ -115,13 +118,15 @@ export class MapComponent {
       },
     ],
   };
-  markers = [] as any[];
+  markers: google.maps.Marker[] = [];
+  markerRawData: any;
 
   async ngAfterViewInit() {
     //取得相簿清單
     try {
       const res = await this.getTripData().toPromise();
-      console.log(res);
+      this.markerRawData = res;
+      console.log(this.markerRawData);
       this.resetMarkers(res as any[]);
     } catch (ex) {
       console.log(ex);
@@ -137,24 +142,52 @@ export class MapComponent {
   resetMarkers(data: any[]) {
     this.markers = data?.map((x) => {
       const locs = x.location?.split(',');
-      return {
+      return new google.maps.Marker({
         position: {
           lat: Number(locs[0] ?? this.def_lat),
           lng: Number(locs[1] ?? this.def_lng),
         },
         title: x.name,
-        label: x.name.split('')[0],
-        options: { animation: google.maps.Animation.DROP },
+        label: {
+          text: x.code,
+          color: '#25331b',
+          fontWeight: 'bold',
+        },
         icon: {
-          path: google.maps.SymbolPath.CIRCLE,
-          fillColor: '#f7a110',
-          fillOpacity: 1,
-          strokeColor: '#666',
-          strokeWeight: 1,
-          scale: 15
-        }
-      };
+          url: '../../assets/img/marker/m0.png',
+          scaledSize: new google.maps.Size(50, 50),
+        },
+        animation: google.maps.Animation.DROP,
+      });
     });
     console.log(this.markers);
+    new MarkerClusterer(this.map.googleMap!, this.markers, {
+      // imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+      clusterClass: 'aaa',
+      styles: [
+        {
+          url: `../../assets/img/marker/m1.png`,
+          height: 50,
+          width: 50,
+          anchorText: [15, -2],
+          textColor: '#000',
+          textSize: 16,
+        },
+      ],
+    });
+    this.markers.forEach((marker,i) => {
+      marker.addListener('click', () => {
+        this.infoWindow.setContent(`
+          <div class='info-window'>
+            <h2>${this.markerRawData[i].name}</h2>
+            <img src="${this.markerRawData[i].image}">
+            <p>${this.markerRawData[i].note}</p>
+            <p>${this.markerRawData[i].link}</p>
+          </div>
+        `);
+        this.infoWindow.open(this.map.googleMap, marker);
+      });
+    });
   }
+  infoWindow = new google.maps.InfoWindow();
 }
