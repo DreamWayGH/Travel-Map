@@ -154,7 +154,7 @@ export class MapComponent {
           fontWeight: 'bold',
         },
         icon: {
-          url: '../../assets/img/marker/m0.png',
+          url: 'assets/img/marker/m0.png',
           scaledSize: new google.maps.Size(50, 50),
         },
         animation: google.maps.Animation.DROP,
@@ -166,7 +166,7 @@ export class MapComponent {
       clusterClass: 'aaa',
       styles: [
         {
-          url: `../../assets/img/marker/m1.png`,
+          url: `assets/img/marker/m1.png`,
           height: 50,
           width: 50,
           anchorText: [15, -2],
