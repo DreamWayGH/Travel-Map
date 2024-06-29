@@ -69,6 +69,10 @@ export class HomeComponent {
 
   //更換照片
   thisPhotoUrl = '';
+  thisPhotoTitle = '';
+  thisPhotoOwner = '';
+  thisPhotoInfo = '';
+  thisPhotoRef = '';
   isPhotoLeave = true;
   photoOpacityTimeout: any = null;
   changePhoto(id: number) {
@@ -85,6 +89,7 @@ export class HomeComponent {
       return;
     }
     this.timelineData[id].selected = true;
+    console.log(this.timelineData[id]);
     this.isPhotoLeave = true;
     if (this.photoOpacityTimeout != null) {
       window.clearTimeout(this.photoOpacityTimeout);
@@ -92,6 +97,10 @@ export class HomeComponent {
     this.photoOpacityTimeout = setTimeout(() => {
       this.thisPhotoUrl =
         this.timelineData[id].img || 'assets/img/Background.jpg';
+      this.thisPhotoTitle = this.timelineData[id].content;
+      this.thisPhotoOwner = this.timelineData[id].owner;
+      this.thisPhotoInfo = this.timelineData[id].note;
+      this.thisPhotoRef = this.timelineData[id].link;
       this.isPhotoLeave = false;
       this.photoOpacityTimeout = null;
       this.checkVisibility();
@@ -157,6 +166,9 @@ export class HomeComponent {
         img: data.image,
         date: this.datePipe.transform(data.date.toString(), 'yyyy-MM-dd'),
         type: 'trip',
+        note: data.note,
+        link: data.link,
+        owner: data.owner,
         selected: false,
       } as TripData;
       this.timelineData.push(newTrip);
@@ -192,4 +204,7 @@ interface TripData {
   type: 'year' | 'trip';
   selected: boolean;
   img: string;
+  note: string;
+  link: string;
+  owner: string;
 }

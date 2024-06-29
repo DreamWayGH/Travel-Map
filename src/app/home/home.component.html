@@ -12,6 +12,17 @@
       (mouseover)="stopPlayPhoto(true)"
       (mouseleave)="stopPlayPhoto(false)"
     />
+    <div class="photo-info">
+      <div class="marker-info">
+        <div *ngIf="thisPhotoOwner" class="owner-wrap">
+          {{ thisPhotoOwner }}
+        </div>
+        <div *ngIf="thisPhotoInfo">{{ thisPhotoInfo }}</div>
+      </div>
+      <a *ngIf="thisPhotoRef" [href]="thisPhotoRef" target="_blank">{{
+        thisPhotoRef
+      }}</a>
+    </div>
   </div>
   <img
     *ngIf="isPlayStoped"

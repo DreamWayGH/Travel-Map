@@ -176,6 +176,10 @@ export class MapComponent {
       ],
     });
     this.markers.forEach((marker, i) => {
+      console.log(this.markerRawData[i]);
+      const owners = this.markerRawData[i].owner
+        ? `<div class='owner-wrap'>${this.markerRawData[i].owner}</div>`
+        : '';
       marker.addListener('click', () => {
         this.infoWindow.setContent(`
           <div class='info-window'>
@@ -183,7 +187,10 @@ export class MapComponent {
              <a href="${this.markerRawData[i].image}" target="_blank">
               <img src="${this.markerRawData[i].image}"/>
             </a>
-            <p>${this.markerRawData[i].note}</p>
+            <div class='marker-info'>
+              ${owners}
+              <p>${this.markerRawData[i].note}</p>
+            </div>
             <a href='${this.markerRawData[i].link ?? ''}' target="_blank">${
               this.markerRawData[i].link ?? ''
             }</a>

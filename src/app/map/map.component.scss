@@ -68,5 +68,17 @@
       word-wrap: break-word;
       word-break: break-all;
     }
+    .marker-info {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.5rem;
+      .owner-wrap {
+        border-radius: 20px;
+        background-color: #f1ca7b;
+        padding: 5px;
+        word-break: keep-all;
+      }
+    }
   }
 }
