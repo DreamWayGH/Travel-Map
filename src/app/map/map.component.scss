@@ -68,16 +68,24 @@
       word-wrap: break-word;
       word-break: break-all;
     }
-    .marker-info {
+    .member-wrap {
+      max-width: min(300px, 100%);
       display: flex;
       flex-direction: row;
+      flex-wrap: wrap;
       align-items: center;
-      gap: 0.5rem;
-      .owner-wrap {
+      justify-content: center;
+      gap: 5px;
+      > div {
         border-radius: 20px;
-        background-color: #f1ca7b;
         padding: 5px;
         word-break: keep-all;
+        &.owner {
+          background-color: #f1ca7b;
+        }
+        &.member {
+          background-color: #ccdefa;
+        }
       }
     }
   }

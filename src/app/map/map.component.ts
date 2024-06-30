@@ -119,13 +119,13 @@ export class MapComponent {
     ],
   };
   markers: google.maps.Marker[] = [];
-  markerRawData: any;
+  markerRawData: TripData[] = [];
 
   async ngAfterViewInit() {
     //取得相簿清單
     try {
       const res = await this.getTripData().toPromise();
-      this.markerRawData = res;
+      this.markerRawData = res?.map((x, i) => ({ ...x, sequence: i })) ?? [];
       console.log(this.markerRawData);
       this.resetMarkers(res as any[]);
     } catch (ex) {
@@ -134,12 +134,12 @@ export class MapComponent {
   }
 
   getTripData() {
-    return this.http.get(
+    return this.http.get<TripData[]>(
       'https://travel-map-server.fly.dev/api/GoogleSheet/trips',
     );
   }
 
-  resetMarkers(data: any[]) {
+  resetMarkers(data: TripData[]) {
     this.markers = data?.map((x) => {
       const locs = x.location?.split(',');
       return new google.maps.Marker({
@@ -160,7 +160,7 @@ export class MapComponent {
         animation: google.maps.Animation.DROP,
       });
     });
-    console.log(this.markers);
+
     new MarkerClusterer(this.map.googleMap!, this.markers, {
       // imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
       clusterClass: 'aaa',
@@ -176,29 +176,55 @@ export class MapComponent {
       ],
     });
     this.markers.forEach((marker, i) => {
-      console.log(this.markerRawData[i]);
-      const owners = this.markerRawData[i].owner
-        ? `<div class='owner-wrap'>${this.markerRawData[i].owner}</div>`
+      const info = data[i];
+      const owners = info.owner
+        ? info.owner
+            .split(',')
+            .map((x: string) => {
+              return `<div class='owner'>${x}</div>`;
+            })
+            .join('')
         : '';
+      const members = info.member
+        ? info.member
+            .split(',')
+            .map((x: string) => {
+              return `<div class='member'>${x}</div>`;
+            })
+            .join('')
+        : '';
+      const notes = info.note ? `<p>${info.note}</p>` : '';
       marker.addListener('click', () => {
         this.infoWindow.setContent(`
           <div class='info-window'>
-            <h2>${this.markerRawData[i].name}</h2>
-             <a href="${this.markerRawData[i].image}" target="_blank">
-              <img src="${this.markerRawData[i].image}"/>
+            <h2>${info.name}</h2>
+             <a href="${info.image}" target="_blank">
+              <img src="${info.image}"/>
             </a>
-            <div class='marker-info'>
-              ${owners}
-              <p>${this.markerRawData[i].note}</p>
-            </div>
-            <a href='${this.markerRawData[i].link ?? ''}' target="_blank">${
-              this.markerRawData[i].link ?? ''
-            }</a>
+            <div class='member-wrap'>${owners}${members}</div>
+            ${notes}
+            <a href='${info.link ?? ''}' target="_blank">${info.link ?? ''}</a>
           </div>
         `);
         this.infoWindow.open(this.map.googleMap, marker);
       });
+      this.map.googleMap?.addListener('click', () => {
+        this.infoWindow?.close();
+      });
     });
   }
   infoWindow = new google.maps.InfoWindow();
+}
+
+interface TripData {
+  code: string;
+  name: string;
+  date: string;
+  note: string;
+  image: string;
+  location: string;
+  type: string;
+  owner: string;
+  member: string;
+  link: string;
 }

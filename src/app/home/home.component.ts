@@ -89,7 +89,6 @@ export class HomeComponent {
       return;
     }
     this.timelineData[id].selected = true;
-    console.log(this.timelineData[id]);
     this.isPhotoLeave = true;
     if (this.photoOpacityTimeout != null) {
       window.clearTimeout(this.photoOpacityTimeout);
