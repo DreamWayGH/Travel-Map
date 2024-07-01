@@ -34,7 +34,7 @@
 }
 
 ::ng-deep ng-select {
-  width: 200px;
+  width: min(200px, calc(33.3% - 5px));
   .ng-placeholder {
     padding: 5px;
   }

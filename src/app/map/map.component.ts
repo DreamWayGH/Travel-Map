@@ -134,11 +134,11 @@ export class MapComponent {
   markerRawData: TripData[] = [];
   markerFilterData: TripData[] = [];
 
-  markerTypes: string[] = [];
+  markerTypes: IKey[] = [];
   selectedTypes: string[] = [];
-  markerOwners: string[] = [];
+  markerOwners: IKey[] = [];
   selectedOwners: string[] = [];
-  markerMembers: string[] = [];
+  markerMembers: IKey[] = [];
   selectedMembers: string[] = [];
 
   async ngAfterViewInit() {
@@ -258,26 +258,39 @@ export class MapComponent {
       return selectedItems.length > 0
         ? data.filter((x) => {
             const value = x[key] as string;
-            return value
-              .split(',')
-              .some((item: string) => selectedItems.includes(item));
+            const valueItems = value.split(',');
+            return selectedItems.every((item) => valueItems.includes(item));
           })
         : data;
     };
 
     let newData: TripData[] = this.markerRawData.map((x) => {
-      return { ...x, allMember: `${x.owner},${x.member}` };
+      return {
+        ...x,
+        allMember: x.owner === '--' ? x.member : `${x.owner},${x.member}`,
+      };
     });
     newData = applyFilter(newData, this.selectedTypes, 'type');
     newData = applyFilter(newData, this.selectedOwners, 'owner');
     newData = applyFilter(newData, this.selectedMembers, 'allMember');
 
     const getUniqueValues = (data: TripData[], key: keyof TripData) => {
-      return [
-        ...new Set(
-          data.flatMap((x) => (x[key] as unknown as string).split(',')),
-        ),
-      ].sort();
+      const valueCounts = new Map<string, number>();
+
+      data.forEach((item) => {
+        const values = (item[key] as unknown as string).split(',');
+        values.forEach((value) => {
+          if (valueCounts.has(value)) {
+            valueCounts.set(value, valueCounts.get(value)! + 1);
+          } else {
+            valueCounts.set(value, 1);
+          }
+        });
+      });
+
+      return [...valueCounts.entries()].sort().map(([value, count]) => {
+        return { label: `${value} (${count})`, value: value } as IKey;
+      });
     };
 
     this.markerTypes = getUniqueValues(newData, 'type');
@@ -300,4 +313,9 @@ interface TripData {
   member: string;
   allMember: string;
   link: string;
+}
+
+interface IKey {
+  label: string;
+  value: string;
 }
