@@ -3,11 +3,19 @@ import { CommonModule } from '@angular/common';
 import { GoogleMap, GoogleMapsModule } from '@angular/google-maps';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import MarkerClusterer from '@google/markerclustererplus';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-map',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, GoogleMapsModule],
+  imports: [
+    CommonModule,
+    HttpClientModule,
+    GoogleMapsModule,
+    NgSelectModule,
+    FormsModule,
+  ],
   templateUrl: './map.component.html',
   styleUrl: './map.component.scss',
 })
@@ -18,11 +26,6 @@ export class MapComponent {
 
   def_lat = 23.68348;
   def_lng = 121.025572;
-  center: google.maps.LatLngLiteral = {
-    lat: this.def_lat,
-    lng: this.def_lng,
-  };
-  zoom = 8;
   mapOptions = {
     styles: [
       {
@@ -117,9 +120,26 @@ export class MapComponent {
         ],
       },
     ],
+    zoom: 8,
+    center: {
+      lat: this.def_lat,
+      lng: this.def_lng,
+    },
+    mapTypeControl: false,
+    streetViewControl: false,
   };
   markers: google.maps.Marker[] = [];
+  infoWindow = new google.maps.InfoWindow();
+  markerClusterer: MarkerClusterer | null = null;
   markerRawData: TripData[] = [];
+  markerFilterData: TripData[] = [];
+
+  markerTypes: string[] = [];
+  selectedTypes: string[] = [];
+  markerOwners: string[] = [];
+  selectedOwners: string[] = [];
+  markerMembers: string[] = [];
+  selectedMembers: string[] = [];
 
   async ngAfterViewInit() {
     //取得相簿清單
@@ -127,6 +147,7 @@ export class MapComponent {
       const res = await this.getTripData().toPromise();
       this.markerRawData = res?.map((x, i) => ({ ...x, sequence: i })) ?? [];
       console.log(this.markerRawData);
+      this.updateFilteredData();
       this.resetMarkers(res as any[]);
     } catch (ex) {
       console.log(ex);
@@ -140,6 +161,17 @@ export class MapComponent {
   }
 
   resetMarkers(data: TripData[]) {
+    if (this.markers) {
+      this.markers.forEach((marker) => {
+        marker.setMap(null);
+      });
+    }
+
+    if (this.markerClusterer) {
+      this.markerClusterer.clearMarkers();
+      this.markerClusterer = null;
+    }
+
     this.markers = data?.map((x) => {
       const locs = x.location?.split(',');
       return new google.maps.Marker({
@@ -161,20 +193,23 @@ export class MapComponent {
       });
     });
 
-    new MarkerClusterer(this.map.googleMap!, this.markers, {
-      // imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
-      clusterClass: 'aaa',
-      styles: [
-        {
-          url: `assets/img/marker/m1.png`,
-          height: 50,
-          width: 50,
-          anchorText: [15, -2],
-          textColor: '#000',
-          textSize: 16,
-        },
-      ],
-    });
+    this.markerClusterer = new MarkerClusterer(
+      this.map.googleMap!,
+      this.markers,
+      {
+        // imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+        styles: [
+          {
+            url: `assets/img/marker/m1.png`,
+            height: 50,
+            width: 50,
+            anchorText: [15, -2],
+            textColor: '#000',
+            textSize: 16,
+          },
+        ],
+      },
+    );
     this.markers.forEach((marker, i) => {
       const info = data[i];
       const owners = info.owner
@@ -213,7 +248,44 @@ export class MapComponent {
       });
     });
   }
-  infoWindow = new google.maps.InfoWindow();
+
+  updateFilteredData() {
+    const applyFilter = (
+      data: TripData[],
+      selectedItems: string[],
+      key: keyof TripData,
+    ) => {
+      return selectedItems.length > 0
+        ? data.filter((x) => {
+            const value = x[key] as string;
+            return value
+              .split(',')
+              .some((item: string) => selectedItems.includes(item));
+          })
+        : data;
+    };
+
+    let newData: TripData[] = this.markerRawData.map((x) => {
+      return { ...x, allMember: `${x.owner},${x.member}` };
+    });
+    newData = applyFilter(newData, this.selectedTypes, 'type');
+    newData = applyFilter(newData, this.selectedOwners, 'owner');
+    newData = applyFilter(newData, this.selectedMembers, 'allMember');
+
+    const getUniqueValues = (data: TripData[], key: keyof TripData) => {
+      return [
+        ...new Set(
+          data.flatMap((x) => (x[key] as unknown as string).split(',')),
+        ),
+      ].sort();
+    };
+
+    this.markerTypes = getUniqueValues(newData, 'type');
+    this.markerOwners = getUniqueValues(newData, 'owner');
+    this.markerMembers = getUniqueValues(newData, 'allMember');
+
+    this.resetMarkers(newData);
+  }
 }
 
 interface TripData {
@@ -226,5 +298,6 @@ interface TripData {
   type: string;
   owner: string;
   member: string;
+  allMember: string;
   link: string;
 }

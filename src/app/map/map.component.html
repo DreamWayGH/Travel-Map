@@ -1,12 +1,37 @@
 <div class="main">
   <div class="map-wrap">
-    <google-map
-      height="80vh"
-      width="100%"
-      [center]="center"
-      [zoom]="zoom"
-      [options]="mapOptions"
-    >
-    </google-map>
+    <div class="select-wrap">
+      <ng-select
+        [items]="markerTypes"
+        [multiple]="true"
+        [closeOnSelect]="false"
+        [searchable]="false"
+        placeholder="類型"
+        [(ngModel)]="selectedTypes"
+        (change)="updateFilteredData()"
+      >
+      </ng-select>
+      <ng-select
+        [items]="markerOwners"
+        [multiple]="true"
+        [closeOnSelect]="false"
+        [searchable]="false"
+        placeholder="主辦人"
+        [(ngModel)]="selectedOwners"
+        (change)="updateFilteredData()"
+      >
+      </ng-select>
+      <ng-select
+        [items]="markerMembers"
+        [multiple]="true"
+        [closeOnSelect]="false"
+        [searchable]="false"
+        placeholder="出席人員"
+        [(ngModel)]="selectedMembers"
+        (change)="updateFilteredData()"
+      >
+      </ng-select>
+    </div>
+    <google-map height="80vh" width="100%" [options]="mapOptions"> </google-map>
   </div>
 </div>

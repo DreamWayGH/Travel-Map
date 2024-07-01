@@ -20,10 +20,29 @@
     height: 100vh;
   }
 
+  .select-wrap {
+    display: flex;
+    margin-bottom: 10px;
+    gap: 5px;
+  }
+
   .map-wrap {
     width: calc(100vw - 40px);
     height: calc(100vh - 100px);
     padding: 20px;
+  }
+}
+
+::ng-deep ng-select {
+  width: 200px;
+  .ng-placeholder {
+    padding: 5px;
+  }
+  .ng-select-container {
+    height: 36px;
+    .ng-input {
+      display: none;
+    }
   }
 }
 
@@ -70,6 +89,7 @@
     }
     .member-wrap {
       max-width: min(300px, 100%);
+      margin: 5px 0;
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
