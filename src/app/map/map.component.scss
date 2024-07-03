@@ -40,6 +40,9 @@
   }
   .ng-select-container {
     height: 36px;
+    .ng-value-container{
+      overflow: hidden;
+    }
     .ng-input {
       display: none;
     }

@@ -70,7 +70,8 @@ export class HomeComponent {
   //更換照片
   thisPhotoUrl = '';
   thisPhotoTitle = '';
-  thisPhotoOwner = '';
+  thisPhotoOwners:string[] = [];
+  thisPhotoMembers:string[] = [];
   thisPhotoInfo = '';
   thisPhotoRef = '';
   isPhotoLeave = true;
@@ -97,7 +98,8 @@ export class HomeComponent {
       this.thisPhotoUrl =
         this.timelineData[id].img || 'assets/img/Background.jpg';
       this.thisPhotoTitle = this.timelineData[id].content;
-      this.thisPhotoOwner = this.timelineData[id].owner;
+      this.thisPhotoOwners = this.timelineData[id].owner.split(',');
+      this.thisPhotoMembers = this.timelineData[id].member.split(',');
       this.thisPhotoInfo = this.timelineData[id].note;
       this.thisPhotoRef = this.timelineData[id].link;
       this.isPhotoLeave = false;
@@ -168,6 +170,7 @@ export class HomeComponent {
         note: data.note,
         link: data.link,
         owner: data.owner,
+        member: data.member,
         selected: false,
       } as TripData;
       this.timelineData.push(newTrip);
@@ -206,4 +209,5 @@ interface TripData {
   note: string;
   link: string;
   owner: string;
+  member: string;
 }

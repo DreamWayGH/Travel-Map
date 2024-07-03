@@ -13,12 +13,11 @@
       (mouseleave)="stopPlayPhoto(false)"
     />
     <div class="photo-info">
-      <div class="marker-info">
-        <div *ngIf="thisPhotoOwner" class="owner-wrap">
-          {{ thisPhotoOwner }}
-        </div>
-        <div *ngIf="thisPhotoInfo">{{ thisPhotoInfo }}</div>
+      <div class="member-wrap">
+        <div *ngFor="let x of thisPhotoOwners" class="owner">{{ x }}</div>
+        <div *ngFor="let x of thisPhotoMembers" class="member">{{ x }}</div>
       </div>
+      <div *ngIf="thisPhotoInfo">{{ thisPhotoInfo }}</div>
       <a *ngIf="thisPhotoRef" [href]="thisPhotoRef" target="_blank">{{
         thisPhotoRef
       }}</a>
