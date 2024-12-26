@@ -69,9 +69,10 @@ export class HomeComponent {
 
   //更換照片
   thisPhotoUrl = '';
+  thisPhotoBase64 = '';
   thisPhotoTitle = '';
-  thisPhotoOwners:string[] = [];
-  thisPhotoMembers:string[] = [];
+  thisPhotoOwners: string[] = [];
+  thisPhotoMembers: string[] = [];
   thisPhotoInfo = '';
   thisPhotoRef = '';
   isPhotoLeave = true;
@@ -95,8 +96,8 @@ export class HomeComponent {
       window.clearTimeout(this.photoOpacityTimeout);
     }
     this.photoOpacityTimeout = setTimeout(() => {
-      this.thisPhotoUrl =
-        this.timelineData[id].img || 'assets/img/Background.jpg';
+      this.thisPhotoBase64 =
+        this.timelineData[id].base64 || 'assets/img/Background.jpg';
       this.thisPhotoTitle = this.timelineData[id].content;
       this.thisPhotoOwners = this.timelineData[id].owner.split(',');
       this.thisPhotoMembers = this.timelineData[id].member.split(',');
@@ -175,17 +176,19 @@ export class HomeComponent {
       } as TripData;
       this.timelineData.push(newTrip);
     });
-    this.preLoadImage(this.timelineData);
+    this.preLoadImage();
   }
 
   //預先載入圖片
   preLoadefIndex = -1;
-  async preLoadImage(data: TripData[]) {
-    if (data?.length > 0) {
-      for (let i = 0; i < data.length; i++) {
+  async preLoadImage() {
+    if (this.timelineData?.length > 0) {
+      for (let i = 0; i < this.timelineData.length; i++) {
         try {
-          if (data[i].img) {
-            await this.loadImage(data[i].img).toPromise();
+          if (this.timelineData[i].img) {
+            const blob = await this.loadImage(this.timelineData[i].img).toPromise();
+            const base64 = await this.convertBlobToBase64(blob!);
+            this.timelineData[i].base64 = base64;
           }
         } catch (e) {
           console.log(e);
@@ -198,6 +201,20 @@ export class HomeComponent {
   loadImage(url: string) {
     return this.http.get(url, { responseType: 'blob' });
   }
+
+  // 將 Blob 轉換為 Base64
+  convertBlobToBase64(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  }
+
+  getCachedImage(url: string): string | null {
+    return localStorage.getItem(url);
+  }
 }
 
 interface TripData {
@@ -206,6 +223,7 @@ interface TripData {
   type: 'year' | 'trip';
   selected: boolean;
   img: string;
+  base64: string;
   note: string;
   link: string;
   owner: string;

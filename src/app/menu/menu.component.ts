@@ -24,7 +24,7 @@ export class MenuComponent {
   }
 
   pageList = [
-    { code: 'home', name: 'Home', router: '/menu/home' },
+    { code: 'home', name: 'Time Line', router: '/menu/home' },
     // { code: 'About', name: 'About', router: '/menu/about' },
     { code: 'map', name: 'Map', router: '/menu/map' },
   ];
